@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
- 
     <div class="container mt-4">
         <div class="card" style="width: auto;">
             <div class="card-body">
@@ -10,7 +9,6 @@
             <br>
             <br>
             <!-- Form -->
-        
             <div class="form-group w-25 mx-auto text-center">
                 <form id="login-form" action={{action('PagesController@Dashboard')}} method="POST">
                     @csrf
