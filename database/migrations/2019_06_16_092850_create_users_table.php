@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->integer('base_holiday_entitlement');
             $table->integer('additional_holiday_entitlement');
             $table->integer('amount_holiday_used');
-            $table->char('remember_token',100);
+            $table->char('remember_token',100)->nullable;
             $table->timestamps();
         });
     }

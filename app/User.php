@@ -1,5 +1,8 @@
 <?php
 
+//admin = lemon
+//default = password
+
 namespace App;
 
 use Illuminate\Notifications\Notifiable;

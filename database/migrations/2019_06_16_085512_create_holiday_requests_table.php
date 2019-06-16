@@ -18,6 +18,7 @@ class CreateHolidayRequestsTable extends Migration
             $table->string('request_staff_id');
             $table->datetime('request_start');
             $table->datetime('request_end');
+            $table->string('requester_email_address');
             $table->text('requester_comments')->nullable;
             $table->string('request_status');
             $table->string('reviewer_name')->nullable;
