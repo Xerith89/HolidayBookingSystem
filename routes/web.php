@@ -14,3 +14,5 @@
 Route::get('/', 'PagesController@Index');
 
 Route::post('/dashboard', 'PagesController@Dashboard');
+
+Route::resource('holiday','HolidayRequests');
