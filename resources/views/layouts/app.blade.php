@@ -8,6 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{config('app.name','SLIS Holiday Booking System')}}</title>
         <link rel="stylesheet" href="{{ asset('css/app.css') }}"  type="text/css" >
+        <script src="https://kit.fontawesome.com/de2b08bb41.js"></script>
+         <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}"  type="text/css" >
     </head>
     <body>
         @yield('content')

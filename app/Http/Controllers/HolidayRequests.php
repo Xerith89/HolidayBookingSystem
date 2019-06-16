@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\HolidayRequest;
 
 class HolidayRequests extends Controller
 {
@@ -13,7 +14,8 @@ class HolidayRequests extends Controller
      */
     public function index()
     {
-        //
+        $holidays = HolidayRequest::All();
+        return view('pages.dashboard')->with('holidays', $holidays);
     }
 
     /**

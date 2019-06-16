@@ -1,0 +1,18 @@
+.card-header .fa {
+    transition: .3s transform ease-in-out;
+  }
+.collapsed {
+    transform: rotate(180deg); 
+  }
+
+  #footer {
+    background:#e2dddd;
+    color: #180c0c;
+    text-align: center;
+    padding: 30px;
+    margin-top: 30px;
+}
+
+
+  
+  

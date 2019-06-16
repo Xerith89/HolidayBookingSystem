@@ -13,6 +13,6 @@
 
 Route::get('/', 'PagesController@Index');
 
-Route::post('/dashboard', 'PagesController@Dashboard');
+Route::get('/dashboard', 'PagesController@Dashboard');
 
 Route::resource('holiday','HolidayRequests');
