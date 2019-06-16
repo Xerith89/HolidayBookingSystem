@@ -15,4 +15,4 @@ Route::get('/', 'PagesController@Index');
 
 Route::get('/dashboard', 'PagesController@Dashboard');
 
-Route::resource('holiday','HolidayRequests');
+Route::resource('dashboard','HolidayRequests');

@@ -33,8 +33,8 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body text-center ">
                 <h3 class="card-title">Pending Requests</h3>
-                @if(count($holidays) > 0)
-                    @foreach ($holidays as $holiday )
+                @if(count($pending_requests) > 0)
+                    @foreach ($pending_requests as $request )
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -50,12 +50,12 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$holiday->request_start->format('d/m/Y H:i') }}</td>
-                                        <td>{{$holiday->request_end->format('d/m/Y H:i') }}</td>
-                                        <td>{{$holiday->total_days_requested}}</td>
-                                        <td>{{$holiday->requester_comments}}</td>
-                                        <td>{{$holiday->request_status}}</td>
-                                        <td>{{$holiday->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->request_start->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->request_end->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->total_days_requested}}</td>
+                                        <td>{{$request->requester_comments}}</td>
+                                        <td>{{$request->request_status}}</td>
+                                        <td>{{$request->created_at->format('d/m/Y H:i') }}</td>
                                         <td><button class="btn btn-info" href="#">Edit</button> <button class="btn btn-danger" href="#">Cancel</button></td>
                                     </tr>
                                 </tbody>
@@ -79,8 +79,8 @@
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion-two">
             <div class="card-body text-center">
                 <h3 class="card-title">Completed Requests</h3>
-                @if(count($holidays) > 0)
-                    @foreach ($holidays as $holiday )
+                @if(count($completed_requests) > 0)
+                    @foreach ($completed_requests as $request )
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead>
@@ -98,22 +98,22 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$holiday->request_start->format('d/m/Y H:i') }}</td>
-                                        <td>{{$holiday->request_end->format('d/m/Y H:i') }}</td>
-                                        <td>{{$holiday->total_days_requested}}</td>
-                                        <td>{{$holiday->requester_comments}}</td>
-                                        <td>{{$holiday->request_status}}</td>
-                                        <td>{{$holiday->created_at->format('d/m/Y H:i') }}</td>
-                                        <td>{{$holiday->reviewer_name}}</td>
-                                        <td>{{$holiday->reviewer_comments}}</td>
-                                        <td>{{$holiday->updated_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->request_start->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->request_end->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->total_days_requested}}</td>
+                                        <td>{{$request->requester_comments}}</td>
+                                        <td>{{$request->request_status}}</td>
+                                        <td>{{$request->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->reviewer_name}}</td>
+                                        <td>{{$request->reviewer_comments}}</td>
+                                        <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     @endforeach
                 @else
-                    <p>No Closed Holiday Requests</p>
+                    <p>No Completed Holiday Requests</p>
                 @endif
             </div>
         </div>

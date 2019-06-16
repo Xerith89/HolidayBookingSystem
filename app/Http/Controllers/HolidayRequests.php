@@ -14,8 +14,11 @@ class HolidayRequests extends Controller
      */
     public function index()
     {
-        $holidays = HolidayRequest::All();
-        return view('pages.dashboard')->with('holidays', $holidays);
+        $pending_requests = HolidayRequest::where('request_status', 'pending')->get();
+        $completed_requests = HolidayRequest::where('request_status', 'approved')
+        ->where('request_status', 'declined')->get();
+        return view('pages.dashboard',compact('pending_requests', 'completed_requests'));
+        
     }
 
     /**
