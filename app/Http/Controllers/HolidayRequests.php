@@ -39,7 +39,26 @@ class HolidayRequests extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'start-date' => 'required',
+            'end-date' => 'required',
+            'start-date' => 'after_or_equal:today',
+            'end-date' => 'after:start_date'
+        ]);
+
+        $holrequest = new HolidayRequest;
+        $holrequest->request_staff_id = 'DE001';
+        $holrequest->request_start = $request->input('start-date');
+        $holrequest->request_end = $request->input('end-date');
+        $holrequest->total_days_requested = '6';
+        $holrequest->requester_email_address = 'default.user@stephenlower.co.uk';
+        $holrequest->requester_comments = $request->input('comments');
+        $holrequest->request_status = 'pending'; 
+
+        $holrequest->save();
+        
+        return redirect('/dashboard')->with('success', 'Holiday Request Submitted');
+        
     }
 
     /**

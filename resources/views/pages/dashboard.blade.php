@@ -13,6 +13,7 @@
         </form>
     </nav> 
     <br>
+    @include('layouts.messages')
     <div class="card text-center mx-auto border-primary" style="width:30rem;">
         <div class="card-body">
             <i class="fas fa-plane-departure fa-4x"></i>
@@ -50,8 +51,8 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$request->request_start->format('d/m/Y H:i') }}</td>
-                                        <td>{{$request->request_end->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->request_start->format('d/m/Y') }}</td>
+                                        <td>{{$request->request_end->format('d/m/Y') }}</td>
                                         <td>{{$request->total_days_requested}}</td>
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
@@ -98,8 +99,8 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$request->request_start->format('d/m/Y H:i') }}</td>
-                                        <td>{{$request->request_end->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->request_start->format('d/m/Y') }}</td>
+                                        <td>{{$request->request_end->format('d/m/Y') }}</td>
                                         <td>{{$request->total_days_requested}}</td>
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
@@ -124,7 +125,8 @@
 <div class="modal fade" id="newRequest" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form>
+            <form action={{action('HolidayRequests@store')}} method="POST">
+            
             <div class="modal-header">
                 <h5 class="modal-title" id="requestModal">New Holiday Request</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -133,21 +135,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Start Date</label>
-                    <input type="date" class="form-control" required>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Half-Day - Starting at 12:30pm
-                    </label>
+                    <input type="date" name="start-date" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>End Date</label>
-                    <input type="date" class="form-control" requires>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Half-Day - Finishing at 12:30pm
-                    </label>
+                    <input type="date" class="form-control" name="end-date" required>
                 </div>
                 <div class="form-group">
                     <br>
@@ -155,8 +147,9 @@
                 </div>
                 <div class="form-group">
                     <label>Comments</label>
-                    <input type="text" class="form-control" placeholder="Optional">
+                    <input type="text" name="comments" class="form-control" placeholder="Optional">
                 </div>
+                @csrf
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
