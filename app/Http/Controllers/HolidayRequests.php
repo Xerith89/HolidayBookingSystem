@@ -61,28 +61,7 @@ class HolidayRequests extends Controller
         
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
+   
     /**
      * Update the specified resource in storage.
      *
@@ -92,7 +71,25 @@ class HolidayRequests extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'start-date' => 'required',
+            'end-date' => 'required',
+            'start-date' => 'after_or_equal:today',
+            'end-date' => 'after:start_date'
+        ]);
+
+        $holrequest = HolidayRequest::find($id);
+        $holrequest->request_staff_id = 'DE001';
+        $holrequest->request_start = $request->input('start-date');
+        $holrequest->request_end = $request->input('end-date');
+        $holrequest->total_days_requested = '6';
+        $holrequest->requester_email_address = 'default.user@stephenlower.co.uk';
+        $holrequest->requester_comments = $request->input('comments');
+        $holrequest->request_status = 'pending'; 
+
+        $holrequest->save();
+        
+        return redirect('/dashboard')->with('success', 'Holiday Request Edited');
     }
 
     /**
@@ -103,6 +100,10 @@ class HolidayRequests extends Controller
      */
     public function destroy($id)
     {
-        //
+        $holrequest = HolidayRequest::find($id);
+
+        $holrequest->delete();
+
+        return redirect('/dashboard')->with('success', 'Holiday Request Deleted');
     }
 }
