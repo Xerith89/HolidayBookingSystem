@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('admin_user');
             $table->integer('base_holiday_entitlement');
             $table->integer('additional_holiday_entitlement');
+            $table->integer('pending_holiday_used');
             $table->integer('amount_holiday_used');
             $table->char('remember_token',100)->nullable;
             $table->timestamps();

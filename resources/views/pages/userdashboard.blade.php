@@ -21,6 +21,8 @@
             <i class="fas fa-plane-departure fa-4x"></i>
             <h3 class="card-title">Your Holiday Summary</h3>
             <p class="card-text">You have used <strong>{{Auth::user()->amount_holiday_used}}</strong> days out of your <strong>{{Auth::user()->base_holiday_entitlement}}</strong> day leave entitlement</p>
+            <p class="card-text">You have <strong>{{Auth::user()->pending_holiday_used}}</strong> days requested that are pending approval.</p>
+            <p class="card-text">You may request <strong>{{(Auth::user()->base_holiday_entitlement - Auth::user()->pending_holiday_used)}}</strong> more days for the year.</p>
             <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
         </div>
     </div>
@@ -41,27 +43,33 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">From</th>
-                                        <th scope="col">To</th>
+                                        <th scope="col">Date From</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Date To</th>
+                                        <th scope="col">Time</th>
                                         <th scope="col"># Days</th>
                                         <th scope="col">Your Comments</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Date Submitted</th>
-                                        <th scope="col">ID</th>
+                                        <th scope="col"></th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>{{$request->request_start->format('d/m/Y') }}</td>
+                                        <td>{{date('G:i', strtotime($request->request_start_time)) }}
                                         <td>{{$request->request_end->format('d/m/Y') }}</td>
+                                        <td>{{date('G:i', strtotime($request->request_end_time))}}
                                         <td>{{$request->total_days_requested}}</td>
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
                                         <td>{{$request->created_at->format('d/m/Y H:i') }}</td>
-                                        <td>{{$request->id}}</td>
-                                        <td><button class="btn btn-info" data-toggle="modal" data-target="#editRequest">Edit</button>
-                                            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteRequest">Delete</button></td>
+                                        <td><a class="btn btn-info" href="/dashboard/{{$request->id}}/edit">Edit</a></td>
+                                        <td><form action={{action('HolidayRequests@destroy', ['id' => $request->id])}} method="POST">
+                                        @csrf        
+                                        <input type="hidden" name="_method" value="DELETE">
+                                       <button type="submit" class="btn btn-danger" >Delete</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -90,8 +98,9 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th scope="col">From</th>
-                                        <th scope="col">To</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Date To</th>
+                                        <th scope="col">Time</th>
                                         <th scope="col"># Days</th>
                                         <th scope="col">Your Comments</th>
                                         <th scope="col">Status</th>
@@ -103,15 +112,17 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$completedrequest->request_start->format('d/m/Y') }}</td>
-                                        <td>{{$completedrequest->request_end->format('d/m/Y') }}</td>
+                                        <td>{{$request->request_start->format('d/m/Y') }}</td>
+                                        <td>{{$request->request_start_time}}
+                                        <td>{{$request->request_end->format('d/m/Y') }}</td>
+                                        <td>{{$request->request_end_time}}
                                         <td>{{$completedrequest->total_days_requested}}</td>
                                         <td>{{$completedrequest->requester_comments}}</td>
                                         <td>{{$completedrequest->request_status}}</td>
-                                        <td>{{$completedrequest->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{$completedrequest->created_at}}</td>
                                         <td>{{$completedrequest->reviewer_name}}</td>
                                         <td>{{$completedrequest->reviewer_comments}}</td>
-                                        <td>{{$completedrequest->updated_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{$completedrequest->updated_at}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -125,6 +136,10 @@
     </div> 
     <br>   
 </div>
+</div>
+<footer id="footer">
+    <p>Copyright &copy; 2019 Stephen Lower Insurance Services</p>
+</footer>
 
 <div class="modal fade" id="newRequest" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -142,16 +157,29 @@
                     <input type="date" name="start-date" class="form-control" required>
                 </div>
                 <div class="form-group">
+                    <label>Start Time</label>
+                    <select name="start-time" class="form-control form-control-sm" required>
+                        <option>09:00</option>
+                        <option>12:30</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>End Date</label>
                     <input type="date" class="form-control" name="end-date" required>
                 </div>
                 <div class="form-group">
-                    <br>
-                    <label>Total Days Taken:</label>
+                    <label>End Time</label>
+                    <select name="end-time" class="form-control form-control-sm" required>
+                        <option>17:00</option>
+                        <option>12:30</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Total Days Taken</label>
                 </div>
                 <div class="form-group">
                     <label>Comments</label>
-                    <input type="text" name="comments" class="form-control" placeholder="Optional">
+                    <textarea rows="3" cols="70" class="form-control" placeholder="Optional"></textarea> 
                 </div>
                 @csrf
             </div>
@@ -163,75 +191,4 @@
         </div>
     </div>
 </div>
-
-@if (count($pending_requests) > 0)
-<div class="modal fade" id="editRequest" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content"> {{----}}
-            <form action={{action('HolidayRequests@update',['id' => $request->id])}} method="POST">
-            <div class="modal-header">
-                <h5 class="modal-title" id="requestModal">Edit Holiday Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Start Date</label>
-                    <input type="date" value="{{$request->start_date}}" name="start-date" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>End Date</label>
-                    <input type="date"value="{{$request->end_date}}" class="form-control" name="end-date" required>
-                </div>
-                <div class="form-group">
-                    <br>
-                    <label>Total Days Taken: {{$request->total_days_requested}}</label>
-                </div>
-                <div class="form-group">
-                    <label>Comments</label>
-                    <input type="text" name="comments" value="{{$request->id}}" class="form-control" placeholder="Optional">
-                </div>
-                @csrf
-            </div>
-            <div class="modal-footer">
-            <input type="hidden" name="_method" value="PUT">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Submit Request</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="deleteRequest" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form action={{action('HolidayRequests@destroy',['id' => $request->id])}} method="POST">
-            <div class="modal-header">
-                <h5 class="modal-title" id="requestModal">Delete Holiday Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                <p>This will delete your holiday request for {{$request->start_date}}
-                to {{$request->end_date}} 
-                <br>
-                <p class="text-center">Are you sure?  
-                @csrf
-            </div>
-            <div class="modal-footer">
-            <input type="hidden" name="_method" value="DELETE">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endif
-</div>
-<footer id="footer">
-    <p>Copyright &copy; 2019 Stephen Lower Insurance Services</p>
-</footer>
 @endsection()

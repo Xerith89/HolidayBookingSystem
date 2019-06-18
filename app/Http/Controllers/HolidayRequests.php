@@ -33,6 +33,17 @@ class HolidayRequests extends Controller
         //
     }
 
+    public function show()
+    {
+        
+    }
+
+    public function edit($id)
+    {
+        $holrequest = HolidayRequest::find($id);
+        return view('requests.edit')->with('holrequest', $holrequest);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -44,6 +55,8 @@ class HolidayRequests extends Controller
         $this->validate($request, [
             'start-date' => 'required',
             'end-date' => 'required',
+            'start-time' => 'required',
+            'end-time' => 'required',
             'start-date' => 'after_or_equal:today',
             'end-date' => 'after:start-date'
         ]);
@@ -51,7 +64,9 @@ class HolidayRequests extends Controller
         $holrequest = new HolidayRequest;
         $holrequest->request_staff_id = Auth::user()->staff_id;
         $holrequest->request_start = $request->input('start-date');
+        $holrequest->request_start_time = $request->input('start-time');
         $holrequest->request_end = $request->input('end-date');
+        $holrequest->request_end_time = $request->input('end-time');
         $holrequest->total_days_requested = '6';
         $holrequest->requester_email_address = Auth::user()->email;
         $holrequest->requester_comments = $request->input('comments');
@@ -94,7 +109,7 @@ class HolidayRequests extends Controller
         $holrequest->request_status = 'Pending'; 
 
         $user = User::where('staff_id', Auth::user()->staff_id)->first();
-        $user->amount_holiday_used += $holrequest->total_days_requested;
+        $user->pending_holiday_used += $holrequest->total_days_requested;
         $user->save();
 
         $holrequest->save();
@@ -112,7 +127,7 @@ class HolidayRequests extends Controller
     {
         $holrequest = HolidayRequest::find($id);
         $user = User::where('staff_id', Auth::user()->staff_id)->first();
-        $user->amount_holiday_used -= $holrequest->total_days_requested;
+        $user->pending_holiday_used -= $holrequest->total_days_requested;
         $user->save();
         $holrequest->delete();
 
