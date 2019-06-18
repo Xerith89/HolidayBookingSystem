@@ -47,6 +47,7 @@
                                         <th scope="col">Your Comments</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Date Submitted</th>
+                                        <th scope="col">ID</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -58,6 +59,7 @@
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
                                         <td>{{$request->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{$request->id}}</td>
                                         <td><button class="btn btn-info" data-toggle="modal" data-target="#editRequest">Edit</button>
                                             <button class="btn btn-danger" data-toggle="modal" data-target="#deleteRequest">Delete</button></td>
                                     </tr>
