@@ -16,3 +16,6 @@ Route::get('/', 'PagesController@Index');
 Route::get('/dashboard', 'PagesController@Dashboard');
 
 Route::resource('dashboard','HolidayRequests');
+
+Auth::routes();
+
