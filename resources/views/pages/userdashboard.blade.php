@@ -23,7 +23,9 @@
             <p class="card-text">You have used <strong>{{Auth::user()->amount_holiday_used}}</strong> days out of your <strong>{{Auth::user()->base_holiday_entitlement}}</strong> day leave entitlement</p>
             <p class="card-text">You have <strong>{{Auth::user()->pending_holiday_used}}</strong> days requested that are pending approval.</p>
             <p class="card-text">You may request <strong>{{(Auth::user()->base_holiday_entitlement - Auth::user()->pending_holiday_used)}}</strong> more days for the year.</p>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
+            @if (Auth::user()->amount_holiday_used < Auth::user()->base_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->base_holiday_entitlement )
+                <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
+            @endif
         </div>
     </div>
     <br>
@@ -50,8 +52,7 @@
                                         <th scope="col"># Days</th>
                                         <th scope="col">Your Comments</th>
                                         <th scope="col">Status</th>
-                                        <th scope="col">Date Submitted</th>
-                                        <th scope="col"></th>
+                                        <th scope="col">Last Edited</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -64,16 +65,92 @@
                                         <td>{{$request->total_days_requested}}</td>
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
-                                        <td>{{$request->created_at->format('d/m/Y H:i') }}</td>
-                                        <td><a class="btn btn-info" href="/dashboard/{{$request->id}}/edit">Edit</a></td>
-                                        <td><form action={{action('HolidayRequests@destroy', ['id' => $request->id])}} method="POST">
-                                        @csrf        
-                                        <input type="hidden" name="_method" value="DELETE">
-                                       <button type="submit" class="btn btn-danger" >Delete</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                        <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
+                                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#editRequest-{{$request->id}}">Edit</button>
+                                        
+                                        <div class="modal fade" id="editRequest-{{$request->id}}" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+                                            <form action={{action('HolidayRequests@update',['id' => $request->id])}} method="POST">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content"> {{----}}
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="requestModal">Edit Holiday Request</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    
+                                                        <div class="form-group">
+                                                            <label>Start Date</label>
+                                                            <input type="date" name="start-date" value="{{$request->request_start->format('Y-m-d')}}"  class="form-control" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Start Time</label>
+                                                            <select name="start-time" class="form-control form-control-sm" required>
+                                                                <option>09:00</option>
+                                                                <option>12:30</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>End Date</label>
+                                                            <input type="date" class="form-control" value="{{$request->request_end->format('Y-m-d')}}" name="end-date" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>End Time</label>
+                                                            <select name="end-time" class="form-control form-control-sm" required>
+                                                                <option>17:00</option>
+                                                                <option>12:30</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Total Days Taken</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Comments</label>
+                                                            <input type="text" name="comments" class="form-control" value="{{$request->requester_comments}}" placeholder="Optional">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    @csrf
+                                                    <input type="hidden" name="_method" value="PUT">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Submit Request</button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteRequest-{{$request->id}}">Delete</button>
+                                        <div class="modal fade" id="deleteRequest-{{$request->id}}" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="requestModal">Delete Holiday Request</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <p>This will delete your holiday request for <strong>{{$request->request_start->format('d/m/Y')}}</strong> to <strong>{{$request->request_end->format('d/m/Y')}}</strong>.
+                                                            <br>
+                                                            <p><strong>Are you sure?</strong>  
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action={{action('HolidayRequests@destroy',['id' => $request->id])}} method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="_method" value="DELETE">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>   
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     @endforeach
                 @else
                     <p>No Open Holiday Requests</p>
@@ -179,7 +256,7 @@
                 </div>
                 <div class="form-group">
                     <label>Comments</label>
-                    <textarea rows="3" cols="70" class="form-control" placeholder="Optional"></textarea> 
+                    <input type="text" name="comments" class="form-control" placeholder="Optional"> 
                 </div>
                 @csrf
             </div>

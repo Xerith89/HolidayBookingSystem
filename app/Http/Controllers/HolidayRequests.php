@@ -75,7 +75,7 @@ class HolidayRequests extends Controller
         $holrequest->save();
 
         $user = User::where('staff_id', Auth::user()->staff_id)->first();
-        $user->amount_holiday_used += $holrequest->total_days_requested;
+        $user->pending_holiday_used += $holrequest->total_days_requested;
         $user->save();
         
         return redirect('/dashboard')->with('success', 'Holiday Request Submitted');
@@ -100,15 +100,21 @@ class HolidayRequests extends Controller
         ]);
 
         $holrequest = HolidayRequest::find($id);
+        $user = User::where('staff_id', Auth::user()->staff_id)->first();
+
+        $user->pending_holiday_used -= $holrequest->total_days_requested;
+        
         $holrequest->request_staff_id = Auth::user()->staff_id;
         $holrequest->request_start = $request->input('start-date');
+        $holrequest->request_start_time = $request->input('start-time');
+        $holrequest->request_end_time = $request->input('end-time');
         $holrequest->request_end = $request->input('end-date');
         $holrequest->total_days_requested = '6';
         $holrequest->requester_email_address = Auth::user()->staff_id;
         $holrequest->requester_comments = $request->input('comments');
         $holrequest->request_status = 'Pending'; 
 
-        $user = User::where('staff_id', Auth::user()->staff_id)->first();
+        
         $user->pending_holiday_used += $holrequest->total_days_requested;
         $user->save();
 
