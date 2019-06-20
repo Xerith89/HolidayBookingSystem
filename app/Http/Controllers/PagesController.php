@@ -19,6 +19,11 @@ class PagesController extends Controller
 
     public function Dashboard ()
     {
+        if (!Auth::check())
+        {
+            return redirect('index');
+        } else {
         return view('pages.dashboard');
+        }
     }
 }

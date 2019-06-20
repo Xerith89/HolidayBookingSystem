@@ -189,10 +189,10 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$request->request_start->format('d/m/Y') }}</td>
-                                        <td>{{$request->request_start_time}}
-                                        <td>{{$request->request_end->format('d/m/Y') }}</td>
-                                        <td>{{$request->request_end_time}}
+                                        <td>{{$completedrequest->request_start->format('d/m/Y') }}</td>
+                                        <td>{{$completedrequest->request_start_time}}
+                                        <td>{{$completedrequest->request_end->format('d/m/Y') }}</td>
+                                        <td>{{$completedrequest->request_end_time}}
                                         <td>{{$completedrequest->total_days_requested}}</td>
                                         <td>{{$completedrequest->requester_comments}}</td>
                                         <td>{{$completedrequest->request_status}}</td>
