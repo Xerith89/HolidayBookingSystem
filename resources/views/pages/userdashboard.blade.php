@@ -114,9 +114,6 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label>Total Days Taken</label>
-                                                        </div>
-                                                        <div class="form-group">
                                                             <label>Comments</label>
                                                             <input type="text" name="comments" class="form-control" value="{{$request->requester_comments}}" placeholder="Optional">
                                                         </div>
@@ -263,9 +260,6 @@
                         <option>17:00</option>
                         <option>12:30</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label>Total Days Taken</label>
                 </div>
                 <div class="form-group">
                     <label>Comments</label>
