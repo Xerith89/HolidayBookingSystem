@@ -43,11 +43,6 @@ class HolidayRequests extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function edit($id)
-    {
-        $holrequest = HolidayRequest::find($id);
-        return view('requests.edit')->with('holrequest', $holrequest);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -70,13 +65,11 @@ class HolidayRequests extends Controller
         $date = new BusinessDays();
 
          //Add company holidays
-        $companyholiday = CompanyHoliday::all();
+        $companyholiday = CompanyHoliday::where('half_day', false)->get();
         foreach($companyholiday as $holiday){
-            if ( $holiday->half_day == false) {
-             echo $holiday->holiday_date;
-                //$splitDate = explode("-", $holiday->holiday_date);
-             //$date->addHoliday(Carbon::createFromFormat('Y-m-d', $splitDate[0],$splitDate[1],$splitDate[2]));
-            }
+            $splitDate = explode("-", $holiday->holiday_date->format('Y-m-d'));
+            $stuff = Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]);
+            $date->addHoliday(Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]));
         }
 
         //Split the dates up into integer arrays for use with carbon
@@ -84,15 +77,15 @@ class HolidayRequests extends Controller
         $enddate = explode("-", $request->input('end-date'));
         $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
         //Calculate half days
-        if ($request->input('end-date') == '12:30' || $request->input('start-date') == '12:30' )
-        {
-            $days -= 0.5;
-        } 
-        else if ($request->input('end-date') == '12:30' && $request->input('start-date') == '12:30' )
+        if (date('G:i', strtotime($request->input('end-time'))) == '12:30' && date('G:i', strtotime($request->input('start-time'))) == '12:30')
         {
             $days -= 1.0;
         }
-
+        else if (date('G:i', strtotime($request->input('end-time'))) == '12:30' || date('G:i', strtotime($request->input('start-time'))) == '12:30')
+        {
+            $days -= 0.5;
+        } 
+        
         $holrequest->request_staff_id = Auth::user()->staff_id;
         $holrequest->request_start = $request->input('start-date');
         $holrequest->request_start_time = $request->input('start-time');
@@ -163,19 +156,27 @@ class HolidayRequests extends Controller
             ]);
 
             $date = new BusinessDays();
+             //Add company holidays
+            $companyholiday = CompanyHoliday::where('half_day', false)->get();
+            foreach($companyholiday as $holiday){
+            $splitDate = explode("-", $holiday->holiday_date->format('Y-m-d'));
+            $stuff = Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]);
+            $date->addHoliday(Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]));
+        }
             //Split the dates up into integer arrays for use with carbon
             $startdate = explode("-", $request->input('start-date'));
             $enddate = explode("-", $request->input('end-date'));
             $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
             //Calculate half days
-            if ($request->input('end-date') == '12:30' || $request->input('start-date') == '12:30' )
-            {
-                $days -= 0.5;
-            } 
-            else if ($request->input('end-date') == '12:30' && $request->input('start-date') == '12:30' )
+            if (date('G:i', strtotime($request->input('end-time'))) == '12:30' && date('G:i', strtotime($request->input('start-time'))) == '12:30')
             {
                 $days -= 1.0;
             }
+            else if (date('G:i', strtotime($request->input('end-time'))) == '12:30' || date('G:i', strtotime($request->input('start-time'))) == '12:30')
+            {
+                $days -= 0.5;
+            } 
+
             $user = User::where('staff_id', Auth::user()->staff_id)->first();
 
             $user->pending_holiday_used -= $holrequest->total_days_requested;
