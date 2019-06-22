@@ -76,6 +76,7 @@ class HolidayRequests extends Controller
         $startdate = explode("-", $request->input('start-date'));
         $enddate = explode("-", $request->input('end-date'));
         $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
+        
         //Calculate half days
         if (date('G:i', strtotime($request->input('end-time'))) == '12:30' && date('G:i', strtotime($request->input('start-time'))) == '12:30')
         {
@@ -86,6 +87,7 @@ class HolidayRequests extends Controller
             $days -= 0.5;
         } 
         
+        //Store the values from the input form
         $holrequest->request_staff_id = Auth::user()->staff_id;
         $holrequest->request_start = $request->input('start-date');
         $holrequest->request_start_time = $request->input('start-time');
@@ -98,6 +100,7 @@ class HolidayRequests extends Controller
 
         $holrequest->save();
 
+        //Adjust the user's pending holiday count
         $user = User::where('staff_id', Auth::user()->staff_id)->first();
         $user->pending_holiday_used += $holrequest->total_days_requested;
         $user->save();

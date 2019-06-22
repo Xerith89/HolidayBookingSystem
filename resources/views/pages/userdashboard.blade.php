@@ -16,16 +16,28 @@
     </nav> 
     <br>
     @include('layouts.messages')
-    <div class="card text-center mx-auto border-primary" style="width:30rem;">
-        <div class="card-body">
-            <i class="fas fa-plane-departure fa-4x"></i>
-            <h3 class="card-title">Your Holiday Summary</h3>
-            <p class="card-text">You have used <strong>{{number_format(Auth::user()->currentyear_holiday_used)}}</strong> days out of your <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement)}}</strong> day leave entitlement</p>
-            <p class="card-text">You have <strong>{{number_format(Auth::user()->pending_holiday_used)}}</strong> days requested that are pending approval.</p>
-            <p class="card-text">You may request <strong>{{(Auth::user()->currentyear_holiday_entitlement - Auth::user()->pending_holiday_used - Auth::user()->currentyear_holiday_used)}}</strong> more days for the year.</p>
-            @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
-                <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
-            @endif
+    <div class="row">
+        <div class="col">
+            <div class="card text-center mx-auto border-primary" style="width:30rem;">
+                <div class="card-body">
+                    <i class="fas fa-plane-departure fa-4x"></i>
+                    <h3 class="card-title">Your Holiday Summary</h3>
+                    <p class="card-text">You have used <strong>{{number_format(Auth::user()->currentyear_holiday_used,1)}}</strong> days out of your <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement,1)}}</strong> day leave entitlement</p>
+                    <p class="card-text">You have <strong>{{number_format(Auth::user()->pending_holiday_used,1)}}</strong> days requested that are pending approval.</p>
+                    <p class="card-text">You may request <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement - Auth::user()->pending_holiday_used - Auth::user()->currentyear_holiday_used,1)}}</strong> more days for the year.</p>
+                    @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
+                    @endif
+                </div>
+            </div>
+        </div>
+         <div class="col">
+            <div class="card text-center mx-auto border-primary" style="width:30rem;">
+                <div class="card-body">
+                    <i class="fas fa-plane-departure fa-4x"></i>
+                    <h3 class="card-title">Your Booked Holiday</h3>
+                </div>
+            </div>
         </div>
     </div>
     <br>
@@ -62,7 +74,7 @@
                                         <td>{{date('G:i', strtotime($request->request_start_time)) }}
                                         <td>{{$request->request_end->format('d/m/Y') }}</td>
                                         <td>{{date('G:i', strtotime($request->request_end_time))}}
-                                        <td>{{$request->total_days_requested}}</td>
+                                        <td>{{number_format($request->total_days_requested,1)}}</td>
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
                                         <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
@@ -175,6 +187,7 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
+                                        <th scope="col">Date From</th>
                                         <th scope="col">Time</th>
                                         <th scope="col">Date To</th>
                                         <th scope="col">Time</th>
@@ -193,7 +206,7 @@
                                         <td>{{$completedrequest->request_start_time}}
                                         <td>{{$completedrequest->request_end->format('d/m/Y') }}</td>
                                         <td>{{$completedrequest->request_end_time}}
-                                        <td>{{$completedrequest->total_days_requested}}</td>
+                                        <td>{{number_format($completedrequest->total_days_requested,1)}}</td>
                                         <td>{{$completedrequest->requester_comments}}</td>
                                         <td>{{$completedrequest->request_status}}</td>
                                         <td>{{$completedrequest->created_at}}</td>
