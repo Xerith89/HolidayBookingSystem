@@ -9,7 +9,7 @@ class PagesController extends Controller
 {
     public function Index ()
     {
-        if (Auth::check())
+        if (!Auth::guest())
         {
             return redirect('dashboard');
         } else {
@@ -19,11 +19,8 @@ class PagesController extends Controller
 
     public function Dashboard ()
     {
-        if (!Auth::check())
-        {
-            return redirect('index');
-        } else {
+        
         return view('pages.dashboard');
-        }
+       
     }
 }

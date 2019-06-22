@@ -20,6 +20,11 @@ class HolidayRequests extends Controller
      */
     public function index()
     {
+        //make sure we are logged in
+        if (Auth::guest())
+        {
+            return redirect('/');
+        }
         //If we are an admin we need to see all requests
         if (Auth::user()->admin_user)
         {
