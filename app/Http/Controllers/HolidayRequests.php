@@ -64,11 +64,10 @@ class HolidayRequests extends Controller
         $holrequest = new HolidayRequest;
         $date = new BusinessDays();
 
-         //Add company holidays
+         //Add company holidays - full days
         $companyholiday = CompanyHoliday::where('half_day', false)->get();
         foreach($companyholiday as $holiday){
             $splitDate = explode("-", $holiday->holiday_date->format('Y-m-d'));
-            $stuff = Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]);
             $date->addHoliday(Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]));
         }
 
@@ -76,7 +75,15 @@ class HolidayRequests extends Controller
         $startdate = explode("-", $request->input('start-date'));
         $enddate = explode("-", $request->input('end-date'));
         $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
-        
+
+        //Add company holidays - half days
+        $companyholiday = CompanyHoliday::where('half_day', true)->get();
+        foreach($companyholiday as $holiday){
+            if ($holiday->holiday_date >= $request->input('start-date') && $holiday->holiday_date <= $request->input('end-date')) {
+                $days -= 0.5;
+            }
+        }
+
         //Calculate half days
         if (date('G:i', strtotime($request->input('end-time'))) == '12:30' && date('G:i', strtotime($request->input('start-time'))) == '12:30')
         {
@@ -144,10 +151,11 @@ class HolidayRequests extends Controller
                 $holrequest->request_status='Declined';
                 $user->pending_holiday_used -= $holrequest->total_days_requested;
             }
-        $holrequest->reviewer_comments = $request->input('reviewer-comments');
-        $holrequest->reviewer_name = Auth::user()->staff_id;
-        $holrequest->save();
-        $user->save();
+
+            $holrequest->reviewer_comments = $request->input('reviewer-comments');
+            $holrequest->reviewer_name = Auth::user()->staff_id;
+            $holrequest->save();
+            $user->save();
 
         } else {
 
@@ -161,15 +169,26 @@ class HolidayRequests extends Controller
             $date = new BusinessDays();
              //Add company holidays
             $companyholiday = CompanyHoliday::where('half_day', false)->get();
-            foreach($companyholiday as $holiday){
-            $splitDate = explode("-", $holiday->holiday_date->format('Y-m-d'));
-            $stuff = Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]);
-            $date->addHoliday(Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]));
-        }
+
+            foreach($companyholiday as $holiday) {
+                $splitDate = explode("-", $holiday->holiday_date->format('Y-m-d'));
+                $stuff = Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]);
+                $date->addHoliday(Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]));
+            }
+            
             //Split the dates up into integer arrays for use with carbon
             $startdate = explode("-", $request->input('start-date'));
             $enddate = explode("-", $request->input('end-date'));
             $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
+            
+            //Add company holidays - half days
+            $companyholiday = CompanyHoliday::where('half_day', true)->get();
+            foreach($companyholiday as $holiday){
+                if ($holiday->holiday_date >= $request->input('start-date') && $holiday->holiday_date <= $request->input('end-date')) {
+                    $days -= 0.5;
+                }
+            }
+
             //Calculate half days
             if (date('G:i', strtotime($request->input('end-time'))) == '12:30' && date('G:i', strtotime($request->input('start-time'))) == '12:30')
             {
