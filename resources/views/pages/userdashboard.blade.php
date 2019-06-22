@@ -20,10 +20,10 @@
         <div class="card-body">
             <i class="fas fa-plane-departure fa-4x"></i>
             <h3 class="card-title">Your Holiday Summary</h3>
-            <p class="card-text">You have used <strong>{{number_format(Auth::user()->amount_holiday_used)}}</strong> days out of your <strong>{{number_format(Auth::user()->base_holiday_entitlement)}}</strong> day leave entitlement</p>
+            <p class="card-text">You have used <strong>{{number_format(Auth::user()->currentyear_holiday_used)}}</strong> days out of your <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement)}}</strong> day leave entitlement</p>
             <p class="card-text">You have <strong>{{number_format(Auth::user()->pending_holiday_used)}}</strong> days requested that are pending approval.</p>
-            <p class="card-text">You may request <strong>{{(Auth::user()->base_holiday_entitlement - Auth::user()->pending_holiday_used)}}</strong> more days for the year.</p>
-            @if (Auth::user()->amount_holiday_used < Auth::user()->base_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->base_holiday_entitlement )
+            <p class="card-text">You may request <strong>{{(Auth::user()->currentyear_holiday_entitlement - Auth::user()->pending_holiday_used - Auth::user()->currentyear_holiday_used)}}</strong> more days for the year.</p>
+            @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
                 <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
             @endif
         </div>

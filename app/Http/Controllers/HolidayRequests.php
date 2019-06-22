@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\HolidayRequest;
 use App\User;
+use App\CompanyHoliday;
+use App\Lib\BusinessDays;
+use Carbon\Carbon;
+
 use Illuminate\Support\Facades\Auth;
 
 class HolidayRequests extends Controller
@@ -63,12 +67,38 @@ class HolidayRequests extends Controller
         ]);
 
         $holrequest = new HolidayRequest;
+        $date = new BusinessDays();
+
+         //Add company holidays
+        $companyholiday = CompanyHoliday::all();
+        foreach($companyholiday as $holiday){
+            if ( $holiday->half_day == false) {
+             echo $holiday->holiday_date;
+                //$splitDate = explode("-", $holiday->holiday_date);
+             //$date->addHoliday(Carbon::createFromFormat('Y-m-d', $splitDate[0],$splitDate[1],$splitDate[2]));
+            }
+        }
+
+        //Split the dates up into integer arrays for use with carbon
+        $startdate = explode("-", $request->input('start-date'));
+        $enddate = explode("-", $request->input('end-date'));
+        $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
+        //Calculate half days
+        if ($request->input('end-date') == '12:30' || $request->input('start-date') == '12:30' )
+        {
+            $days -= 0.5;
+        } 
+        else if ($request->input('end-date') == '12:30' && $request->input('start-date') == '12:30' )
+        {
+            $days -= 1.0;
+        }
+
         $holrequest->request_staff_id = Auth::user()->staff_id;
         $holrequest->request_start = $request->input('start-date');
         $holrequest->request_start_time = $request->input('start-time');
         $holrequest->request_end = $request->input('end-date');
         $holrequest->request_end_time = $request->input('end-time');
-        $holrequest->total_days_requested = '3';
+        $holrequest->total_days_requested = $days;
         $holrequest->requester_email_address = Auth::user()->email;
         $holrequest->requester_comments = $request->input('comments');
         $holrequest->request_status = 'Pending'; 
@@ -112,7 +142,7 @@ class HolidayRequests extends Controller
                 
                 $holrequest->request_status='Approved';
                 $user->pending_holiday_used -= $holrequest->total_days_requested;
-                $user->base_holiday_entitlement -= $holrequest->total_days_requested;
+                $user->currentyear_holiday_used -= $holrequest->total_days_requested;
             } else {
 
                 $holrequest->request_status='Declined';
@@ -132,6 +162,20 @@ class HolidayRequests extends Controller
                 'end-date' => 'after:start_date'
             ]);
 
+            $date = new BusinessDays();
+            //Split the dates up into integer arrays for use with carbon
+            $startdate = explode("-", $request->input('start-date'));
+            $enddate = explode("-", $request->input('end-date'));
+            $days = $date->daysBetween(Carbon::createFromDate($startdate[0],$startdate[1],$startdate[2]), Carbon::createFromDate($enddate[0],$enddate[1],$enddate[2]));
+            //Calculate half days
+            if ($request->input('end-date') == '12:30' || $request->input('start-date') == '12:30' )
+            {
+                $days -= 0.5;
+            } 
+            else if ($request->input('end-date') == '12:30' && $request->input('start-date') == '12:30' )
+            {
+                $days -= 1.0;
+            }
             $user = User::where('staff_id', Auth::user()->staff_id)->first();
 
             $user->pending_holiday_used -= $holrequest->total_days_requested;
@@ -141,7 +185,7 @@ class HolidayRequests extends Controller
             $holrequest->request_start_time = $request->input('start-time');
             $holrequest->request_end_time = $request->input('end-time');
             $holrequest->request_end = $request->input('end-date');
-            $holrequest->total_days_requested = '6';
+            $holrequest->total_days_requested = $days;
             $holrequest->requester_email_address = Auth::user()->staff_id;
             $holrequest->requester_comments = $request->input('comments');
             $holrequest->request_status = 'Pending'; 
