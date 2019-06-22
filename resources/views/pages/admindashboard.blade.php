@@ -17,9 +17,11 @@
     <div class="row">
         <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card text-center mx-auto border-primary" style="width:20rem;">
-                <div class="card-body">
+                <div class="card-header">
                     <i class="fas fa-user-friends fa-4x"></i>
                     <h3 class="card-title">User Management</h3>
+                </div>
+                <div class="card-body">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#newUser">Add New User</button>
                     <button class="btn btn-secondary" data-toggle="modal" data-target="#editUser">Edit User</button>
                     <button class="btn btn-danger" data-toggle="modal" data-target="#removeUser">Remove User</button>
@@ -28,18 +30,22 @@
         </div>
         <div class="col-lg-4 d-flex align-items-stretch">
         <div class="card text-center mx-auto border-primary" style="width:20rem;">
-                <div class="card-body">
-                    <i class="fas fa-chart-pie fa-4x"></i>
-                    <h3 class="card-title">Reporting</h3>
+            <div class="card-header">
+                <i class="fas fa-chart-pie fa-4x"></i>
+                <h3 class="card-title">Reporting</h3>
+            </div>
+                <div class="card-body">    
                     <p>Coming Soon
                 </div>
             </div>
         </div>
         <div class="col-lg-4 d-flex align-items-stretch">
-        <div class="card text-center mx-auto border-primary" style="width:20rem;">
-                <div class="card-body">
+            <div class="card text-center mx-auto border-primary" style="width:20rem;">
+                <div class="card-header">
                     <i class="fas fa-clock fa-4x"></i>
                     <h3 class="card-title">Company Holiday Management</h3>
+                </div>
+                <div class="card-body">
                     <p>Coming Soon
                 </div>
             </div>
@@ -50,13 +56,10 @@
     <div id="accordion">
         <div class="card border-primary" style="width:auto;">
             <div class="card-header text-center" id="headingOne">
-                <h3 class="mb-0 card-title">
-                    <button class="fa fa-chevron-circle-up" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"></button>
-                </h3>
+                 <h3 class="card-title"><i class="fas fa-exclamation-triangle"></i> Pending Requests <span class="badge badge-primary">{{count($pending_requests)}}</span></h3> 
             </div>
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body text-center ">
-                <h3 class="card-title">Pending Requests</h3>
                 @if(count($pending_requests) > 0)
                     @foreach ($pending_requests as $request )
                         <div class="table-responsive">
@@ -159,17 +162,15 @@
     <div id="accordion-two">
         <div class="card border-primary" style="width:auto;">
             <div class="card-header text-center" id="headingTwo">
-                <h3 class="mb-0 card-title">
-                <button class="fa fa-chevron-circle-up" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"></button>
-                </h3>
+                <h3 class="card-title"><i class="fas fa-calendar-check"></i> Completed Requests <span class="badge badge-success">{{count($completed_requests)}}</span></h3>
             </div>
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion-two">
             <div class="card-body text-center">
-                <h3 class="card-title">Completed Requests</h3>
+                
                 @if(count($completed_requests) > 0)
                     @foreach ($completed_requests as $completedrequest )
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">Requester</th>

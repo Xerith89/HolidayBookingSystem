@@ -161,7 +161,7 @@ class HolidayRequests extends Controller
             }
 
             $holrequest->reviewer_comments = $request->input('reviewer-comments');
-            $holrequest->reviewer_name = Auth::user()->staff_id;
+            $holrequest->reviewer_name = Auth::user()->name;
             $holrequest->save();
             $user->save();
 
@@ -225,7 +225,7 @@ class HolidayRequests extends Controller
             $holrequest->request_end_time = $request->input('end-time');
             $holrequest->request_end = $request->input('end-date');
             $holrequest->total_days_requested = $days;
-            $holrequest->requester_email_address = Auth::user()->staff_id;
+            $holrequest->requester_email_address = Auth::user()->email;
             $holrequest->requester_comments = $request->input('comments');
             $holrequest->request_status = 'Pending'; 
 

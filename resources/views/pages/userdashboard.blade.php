@@ -19,23 +19,27 @@
     <div class="row">
         <div class="col">
             <div class="card text-center mx-auto border-primary" style="width:30rem;">
-                <div class="card-body">
+                <div class="card-header">
                     <i class="fas fa-plane-departure fa-4x"></i>
                     <h3 class="card-title">Your Holiday Summary</h3>
-                    <p class="card-text">You have used <strong>{{number_format(Auth::user()->currentyear_holiday_used,1)}}</strong> days out of your <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement,1)}}</strong> day leave entitlement</p>
-                    <p class="card-text">You have <strong>{{number_format(Auth::user()->pending_holiday_used,1)}}</strong> days requested that are pending approval.</p>
-                    <p class="card-text">You may request <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement - Auth::user()->pending_holiday_used - Auth::user()->currentyear_holiday_used,1)}}</strong> more days for the year.</p>
-                    @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
-                    @endif
+                </div>
+                <div class="card-body">
+                <p class="card-text">You have used <strong>{{number_format(Auth::user()->currentyear_holiday_used,1)}}</strong> days out of your <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement,1)}}</strong> day leave entitlement</p>
+                <p class="card-text">You have <strong>{{number_format(Auth::user()->pending_holiday_used,1)}}</strong> days requested that are pending approval.</p>
+                <p class="card-text">You may request <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement - Auth::user()->pending_holiday_used - Auth::user()->currentyear_holiday_used,1)}}</strong> more days for the year.</p>
+                @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
+                @endif
                 </div>
             </div>
         </div>
          <div class="col">
             <div class="card text-center mx-auto border-primary" style="width:30rem;">
+                <div class="card-header">
+                        <i class="fas fa-globe-europe fa-4x"></i>
+                        <h3 class="card-title">Your Booked Holiday</h3>
+                </div>
                 <div class="card-body">
-                    <i class="fas fa-globe-europe fa-4x"></i>
-                    <h3 class="card-title">Your Booked Holiday</h3>
                 </div>
             </div>
         </div>
@@ -44,17 +48,14 @@
     <div id="accordion">
         <div class="card border-primary" style="width:auto;">
             <div class="card-header text-center" id="headingOne">
-                <h3 class="mb-0 card-title">
-                    <button class="fa fa-chevron-circle-up" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"></button>
-                </h3>
+                <h3 class="card-title"><i class="fas fa-exclamation-triangle"></i> Pending Requests <span class="badge badge-primary">{{count($pending_requests)}}</span></h3> 
             </div>
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body text-center ">
-                <h3 class="card-title">Pending Requests</h3>
                 @if(count($pending_requests) > 0)
                     @foreach ($pending_requests as $request )
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">Date From</th>
@@ -70,13 +71,13 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$request->request_start->format('d/m/Y') }}</td>
+                                        <td><strong>{{$request->request_start->format('d/m/Y') }}</strong></td>
                                         <td>{{date('G:i', strtotime($request->request_start_time)) }}
-                                        <td>{{$request->request_end->format('d/m/Y') }}</td>
+                                        <td><strong>{{$request->request_end->format('d/m/Y') }}</strong></td>
                                         <td>{{date('G:i', strtotime($request->request_end_time))}}
-                                        <td>{{number_format($request->total_days_requested,1)}}</td>
+                                        <td><strong>{{number_format($request->total_days_requested,1)}}</strong></td>
                                         <td>{{$request->requester_comments}}</td>
-                                        <td>{{$request->request_status}}</td>
+                                        <td><strong>{{$request->request_status}}</strong></td>
                                         <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
                                         <td><button class="btn btn-primary" data-toggle="modal" data-target="#editRequest-{{$request->id}}">Edit</button>
                                         
@@ -171,17 +172,14 @@
     <div id="accordion-two">
         <div class="card border-primary" style="width:auto;">
             <div class="card-header text-center" id="headingTwo">
-                <h3 class="mb-0 card-title">
-                <button class="fa fa-chevron-circle-up" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"></button>
-                </h3>
+                <h3 class="card-title"><i class="fas fa-calendar-check"></i> Completed Requests <span class="badge badge-success">{{count($completed_requests)}}</span></h3>
             </div>
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion-two">
             <div class="card-body text-center">
-                <h3 class="card-title">Completed Requests</h3>
                 @if(count($completed_requests) > 0)
                     @foreach ($completed_requests as $completedrequest )
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">Date From</th>
@@ -199,15 +197,15 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$completedrequest->request_start->format('d/m/Y') }}</td>
+                                        <td><strong>{{$completedrequest->request_start->format('d/m/Y') }}</strong></td>
                                         <td>{{$completedrequest->request_start_time}}
-                                        <td>{{$completedrequest->request_end->format('d/m/Y') }}</td>
+                                        <td><strong>{{$completedrequest->request_end->format('d/m/Y') }}</strong></td>
                                         <td>{{$completedrequest->request_end_time}}
-                                        <td>{{number_format($completedrequest->total_days_requested,1)}}</td>
+                                        <td><strong>{{number_format($completedrequest->total_days_requested,1)}}</strong></td>
                                         <td>{{$completedrequest->requester_comments}}</td>
-                                        <td>{{$completedrequest->request_status}}</td>
+                                        <td><strong>{{$completedrequest->request_status}}</strong></td>
                                         <td>{{$completedrequest->created_at}}</td>
-                                        <td>{{$completedrequest->reviewer_name}}</td>
+                                        <td><strong>{{$completedrequest->reviewer_name}}</strong></td>
                                         <td>{{$completedrequest->reviewer_comments}}</td>
                                         <td>{{$completedrequest->updated_at}}</td>
                                     </tr>
