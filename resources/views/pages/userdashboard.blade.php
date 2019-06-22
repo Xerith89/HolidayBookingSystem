@@ -34,7 +34,7 @@
          <div class="col">
             <div class="card text-center mx-auto border-primary" style="width:30rem;">
                 <div class="card-body">
-                    <i class="fas fa-plane-departure fa-4x"></i>
+                    <i class="fas fa-globe-europe fa-4x"></i>
                     <h3 class="card-title">Your Booked Holiday</h3>
                 </div>
             </div>

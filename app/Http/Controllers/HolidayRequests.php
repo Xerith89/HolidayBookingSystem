@@ -58,7 +58,7 @@ class HolidayRequests extends Controller
             'start-time' => 'required',
             'end-time' => 'required',
             'start-date' => 'after_or_equal:today',
-            'end-date' => 'after:start-date'
+            'end-date' => 'after_or_equal:today',
         ]);
 
         $holrequest = new HolidayRequest;
@@ -93,6 +93,12 @@ class HolidayRequests extends Controller
         {
             $days -= 0.5;
         } 
+
+        //Throw error if we have 0 days
+        if ($days < 0.5) {
+            $error = \Illuminate\Validation\ValidationException::withMessages(['days' => ['Total Days Requested Cannot Be Zero'],]);
+            throw $error;
+        }
         
         //Store the values from the input form
         $holrequest->request_staff_id = Auth::user()->staff_id;
@@ -135,6 +141,8 @@ class HolidayRequests extends Controller
                 'start-date' => 'required',
                 'end-date' => 'required',
                 'decision' => 'required',
+                'start-time' => 'required',
+                'end-time' => 'required',
                 'start-date' => 'after_or_equal:today',
                 'end-date' => 'after:start_date'
             ]);
@@ -162,6 +170,8 @@ class HolidayRequests extends Controller
             $this->validate($request, [
                 'start-date' => 'required',
                 'end-date' => 'required',
+                'start-time' => 'required',
+                'end-time' => 'required',
                 'start-date' => 'after_or_equal:today',
                 'end-date' => 'after:start_date'
             ]);
@@ -175,7 +185,7 @@ class HolidayRequests extends Controller
                 $stuff = Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]);
                 $date->addHoliday(Carbon::createFromDate($splitDate[0],$splitDate[1],$splitDate[2]));
             }
-            
+
             //Split the dates up into integer arrays for use with carbon
             $startdate = explode("-", $request->input('start-date'));
             $enddate = explode("-", $request->input('end-date'));
@@ -198,6 +208,12 @@ class HolidayRequests extends Controller
             {
                 $days -= 0.5;
             } 
+
+            //Throw error if we have 0 days
+            if ($days < 0.5) {
+                $error = \Illuminate\Validation\ValidationException::withMessages(['days' => ['Total Days Requested Cannot Be Zero'],]);
+                throw $error;
+            }
 
             $user = User::where('staff_id', Auth::user()->staff_id)->first();
 
