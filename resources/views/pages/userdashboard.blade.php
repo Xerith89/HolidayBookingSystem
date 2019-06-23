@@ -269,7 +269,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Start Date</label>
-                    <input type="date" name="start-date" class="form-control" required>
+                    <input type="date" id="new-modal-start" name="start-date" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label>Start Time</label>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="form-group">
                     <label>End Date</label>
-                    <input type="date" class="form-control" name="end-date" required>
+                    <input type="date" id="new-modal-end" class="form-control" name="end-date" required>
                 </div>
                 <div class="form-group">
                     <label>End Time</label>

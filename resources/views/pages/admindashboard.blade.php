@@ -41,19 +41,20 @@
     <br>
     <div class="row">
         <div class="col-lg-4 d-flex align-items-stretch">
-            <div class="card text-center mx-auto border-primary" style="width:20rem;">
+            <div class="card text-center mx-auto border-primary" style="width:25rem; max-height:230px;">
                 <div class="card-header">
                     <i class="fas fa-users-cog fa-4x"></i>
                     <h3 class="card-title">User Management</h3>
                 </div>
                 <div class="card-body">
                     <button class="btn btn-success" title="Add New User" data-toggle="modal" data-target="#newUser"><i class="fas fa-user-plus fa-2x"></i><br>Add User</button>
+                     <button class="btn btn-primary" title="Edit User" data-toggle="modal" data-target="#editUser"><i class="fas fa-edit fa-2x"></i><br>Edit User</button>
                     <button class="btn btn-danger" title="Remove User" data-toggle="modal" data-target="#deleteUser"><i class="fas fa-user-times fa-2x"></i><br>Delete User</button>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 d-flex align-items-stretch">
-        <div class="card text-center mx-auto border-primary" style="width:20rem;">
+        <div class="card text-center mx-auto border-primary" style="width:25rem; max-height:230px;">
             <div class="card-header">
                 <i class="fas fa-chart-pie fa-4x"></i>
                 <h3 class="card-title">Reporting</h3>
@@ -64,7 +65,7 @@
             </div>
         </div>
         <div class="col-lg-4 d-flex align-items-stretch">
-            <div class="card text-center mx-auto border-primary" style="width:20rem;">
+            <div class="card text-center mx-auto border-primary" style="width:30rem; max-height:300px;">
                 <div class="card-header">
                     <i class="fas fa-clock fa-4x"></i>
                     <h3 class="card-title">Company Holidays</h3>
