@@ -27,19 +27,47 @@
                 <p class="card-text">You have used <strong>{{number_format(Auth::user()->currentyear_holiday_used,1)}}</strong> days out of your <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement,1)}}</strong> day leave entitlement</p>
                 <p class="card-text">You have <strong>{{number_format(Auth::user()->pending_holiday_used,1)}}</strong> days requested that are pending approval.</p>
                 <p class="card-text">You may request <strong>{{number_format(Auth::user()->currentyear_holiday_entitlement - Auth::user()->pending_holiday_used - Auth::user()->currentyear_holiday_used,1)}}</strong> more days for the year.</p>
+                <br>
+                <br>
                 @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#newRequest"> New Holiday Request</button>
+                    <button class="btn btn-primary" title="New Holiday Request" data-toggle="modal" data-target="#newRequest">New Holiday Request</button>
                 @endif
                 </div>
             </div>
         </div>
          <div class="col">
-            <div class="card text-center mx-auto border-primary" style="width:30rem;">
+            <div class="card text-center mx-auto border-primary" style="width:30rem; ">
                 <div class="card-header">
                         <i class="fas fa-globe-europe fa-4x"></i>
                         <h3 class="card-title">Your Booked Holiday</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="min-height: 300px; max-height: 300px; overflow-y: auto;">
+                    @if(count($approved_requests) > 0)
+                        @foreach($approved_requests as $holiday)
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date From</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Date To</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col"># Days</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>{{$holiday->request_start->format('d/m/Y') }}</strong></td>
+                                        <td>{{date('G:i', strtotime($holiday->request_start_time)) }}
+                                        <td><strong>{{$holiday->request_end->format('d/m/Y') }}</strong></td>
+                                        <td>{{date('G:i', strtotime($holiday->request_end_time))}}
+                                        <td>{{number_format($holiday->total_days_requested,1)}}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        @endforeach
+                    @else
+                        <p>No Booked Holiday</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -79,7 +107,7 @@
                                         <td>{{$request->requester_comments}}</td>
                                         <td><strong>{{$request->request_status}}</strong></td>
                                         <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
-                                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#editRequest-{{$request->id}}">Edit</button>
+                                        <td><button class="btn btn-primary" title="Edit Request" data-toggle="modal" data-target="#editRequest-{{$request->id}}"><i class="fas fa-edit"></i></button>
                                         
                                         <div class="modal fade" id="editRequest-{{$request->id}}" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
                                             <form action={{action('HolidayRequests@update',['id' => $request->id])}} method="POST">
@@ -129,7 +157,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <button class="btn btn-danger" data-toggle="modal" data-target="#deleteRequest-{{$request->id}}">Delete</button>
+                                        <button class="btn btn-danger" title="Delete Request" data-toggle="modal" data-target="#deleteRequest-{{$request->id}}"><i class="fas fa-trash"></i></button>
                                         <div class="modal fade" id="deleteRequest-{{$request->id}}" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">

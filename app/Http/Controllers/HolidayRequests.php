@@ -31,14 +31,16 @@ class HolidayRequests extends Controller
             $pending_requests = HolidayRequest::where('request_status', 'Pending')->get();
             $completed_requests = HolidayRequest::where('request_status', 'approved')
             ->orWhere('request_status', 'Declined')->get();
+            $approved_requests = NULL;
         } else {
             //We only want to see our own
             $pending_requests = HolidayRequest::where('request_status', 'pending')->where('request_staff_id','=', Auth::user()->staff_id)->get();
             $completed_requests = HolidayRequest::where('request_status', 'Approved')->where('request_staff_id', '=', Auth::user()->staff_id)
             ->orWhere('request_status', 'Declined')->where('request_staff_id', '=', Auth::user()->staff_id)->get();
+            $approved_requests = HolidayRequest::where('request_status', 'Approved')->where('request_staff_id', '=', Auth::user()->staff_id)->orderBy('request_start')->get();
         }
         
-        return view('pages.dashboard',compact('pending_requests', 'completed_requests'));
+        return view('pages.dashboard',compact('pending_requests', 'completed_requests', 'approved_requests'));
         
     }
 
@@ -101,6 +103,7 @@ class HolidayRequests extends Controller
         
         //Store the values from the input form
         $holrequest->request_staff_id = Auth::user()->staff_id;
+        $holrequest->request_name = Auth::user()->name;
         $holrequest->request_start = $request->input('start-date');
         $holrequest->request_start_time = $request->input('start-time');
         $holrequest->request_end = $request->input('end-date');
@@ -137,13 +140,10 @@ class HolidayRequests extends Controller
         if (Auth::user()->admin_user) {
 
             $this->validate($request, [
-                'start-date' => 'required',
-                'end-date' => 'required',
+                'start-date' => 'required|after_or_equal:today',
                 'decision' => 'required',
                 'start-time' => 'required',
-                'end-time' => 'required',
-                'start-date' => 'after_or_equal:today',
-                'end-date' => 'after:start_date'
+                'end-time' => 'required',                
             ]);
 
             $user = User::where('staff_id', $holrequest->request_staff_id)->first();
@@ -219,6 +219,7 @@ class HolidayRequests extends Controller
             $user->pending_holiday_used -= $holrequest->total_days_requested;
             
             $holrequest->request_staff_id = Auth::user()->staff_id;
+            $holrequest->request_name = Auth::user()->name;
             $holrequest->request_start = $request->input('start-date');
             $holrequest->request_start_time = $request->input('start-time');
             $holrequest->request_end_time = $request->input('end-time');

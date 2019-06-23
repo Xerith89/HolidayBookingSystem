@@ -18,12 +18,12 @@
         <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card text-center mx-auto border-primary" style="width:20rem;">
                 <div class="card-header">
-                    <i class="fas fa-user-friends fa-4x"></i>
+                    <i class="fas fa-users-cog fa-4x"></i>
                     <h3 class="card-title">User Management</h3>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#newUser">Add New User</button>
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Delete User</button>
+                    <button class="btn btn-success" title="Add New User" data-toggle="modal" data-target="#newUser"><i class="fas fa-user-plus fa-2x"></i></button>
+                    <button class="btn btn-danger" title="Remove User" data-toggle="modal" data-target="#deleteUser"><i class="fas fa-user-times fa-2x"></i></button>
                 </div>
             </div>
         </div>
@@ -45,8 +45,8 @@
                     <h3 class="card-title">Company Holidays</h3>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#newHoliday">Add New Holiday</button>
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteHoliday">Delete Holiday</button>
+                    <button class="btn btn-success" data-toggle="modal" title="Add Holiday" data-target="#newHoliday"><i class="fas fa-calendar-plus fa-2x"></i></button>
+                    <button class="btn btn-danger" title="Remove Holiday" data-toggle="modal" data-target="#deleteHoliday"><i class="fas fa-calendar-times fa-2x"></i></button>
                 </div>
             </div>
         </div>
@@ -66,6 +66,7 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
+                                        <th scope="col">Requester</th>>
                                         <th scope="col">Date From</th>
                                         <th scope="col">Time</th>
                                         <th scope="col">Date To</th>
@@ -79,11 +80,12 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$request->request_start->format('d/m/Y') }}</td>
+                                        <td><strong>{{$request->request_name }}</strong></td>
+                                        <td><strong>{{$request->request_start->format('d/m/Y') }}</strong></td>
                                         <td>{{date('G:i', strtotime($request->request_start_time)) }}
-                                        <td>{{$request->request_end->format('d/m/Y') }}</td>
+                                        <td><strong>{{$request->request_end->format('d/m/Y') }}</strong></td>
                                         <td>{{date('G:i', strtotime($request->request_end_time))}}
-                                        <td>{{$request->total_days_requested}}</td>
+                                        <td><strong>{{$request->total_days_requested}}</strong></td>
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
                                         <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
@@ -189,18 +191,18 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{$completedrequest->request_staff_id}}</td>
-                                        <td>{{$completedrequest->request_start->format('d/m/Y') }}</td>
+                                        <td><strong>{{$completedrequest->request_name }}</strong></td>
+                                        <td><strong>{{$completedrequest->request_start->format('d/m/Y') }}</strong></td>
                                         <td>{{$completedrequest->request_start_time}}
-                                        <td>{{$completedrequest->request_end->format('d/m/Y') }}</td>
+                                        <td><strong>{{$completedrequest->request_end->format('d/m/Y') }}</strong></td>
                                         <td>{{$completedrequest->request_end_time}}
-                                        <td>{{$completedrequest->total_days_requested}}</td>
+                                        <td><strong>{{$completedrequest->total_days_requested}}</strong></td>
                                         <td>{{$completedrequest->requester_comments}}</td>
-                                        <td>{{$completedrequest->request_status}}</td>
-                                        <td>{{$completedrequest->created_at}}</td>
+                                        <td><strong>{{$completedrequest->request_status}}</strong></td>
+                                        <td>{{$completedrequest->created_at->format('d/m/Y')}}</td>
                                         <td>{{$completedrequest->reviewer_name}}</td>
                                         <td>{{$completedrequest->reviewer_comments}}</td>
-                                        <td>{{$completedrequest->updated_at}}</td>
+                                        <td>{{$completedrequest->updated_at->format('d/m/Y')}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -280,7 +282,7 @@
 <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action={{action('Users@destroy', ['id' => $request->id])}} method="POST">
+            <form action={{action('Users@destroy', ['id' => 27])}} method="POST">
             
             <div class="modal-header">
                 <h5 class="modal-title" id="requestModal">Delete User</h5>
@@ -347,7 +349,7 @@
 <div class="modal fade" id="deleteHoliday" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action={{action('CompanyHolidays@destroy', ['id' => $request->id])}} method="POST">
+            <form action={{action('CompanyHolidays@destroy', ['id' => 27])}} method="POST">
             
             <div class="modal-header">
                 <h5 class="modal-title" id="requestModal">Delete User</h5>
