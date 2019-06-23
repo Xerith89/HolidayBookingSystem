@@ -47,8 +47,8 @@
                     <h3 class="card-title">User Management</h3>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-success" title="Add New User" data-toggle="modal" data-target="#newUser"><i class="fas fa-user-plus fa-2x"></i></button>
-                    <button class="btn btn-danger" title="Remove User" data-toggle="modal" data-target="#deleteUser"><i class="fas fa-user-times fa-2x"></i></button>
+                    <button class="btn btn-success" title="Add New User" data-toggle="modal" data-target="#newUser"><i class="fas fa-user-plus fa-2x"></i><br>Add User</button>
+                    <button class="btn btn-danger" title="Remove User" data-toggle="modal" data-target="#deleteUser"><i class="fas fa-user-times fa-2x"></i><br>Delete User</button>
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
                     <h3 class="card-title">Company Holidays</h3>
                 </div>
                 <div class="card-body">
-                    <button class="btn btn-success" data-toggle="modal" title="Add Holiday" data-target="#newHoliday"><i class="fas fa-calendar-plus fa-2x"></i></button>
-                    <button class="btn btn-danger" title="Remove Holiday" data-toggle="modal" data-target="#deleteHoliday"><i class="fas fa-calendar-times fa-2x"></i></button>
+                    <button class="btn btn-success" data-toggle="modal" title="Add Holiday" data-target="#newHoliday"><i class="fas fa-calendar-plus fa-2x"></i><br>Add Holiday</button>
+                    <button class="btn btn-danger" title="Remove Holiday" data-toggle="modal" data-target="#deleteHoliday"><i class="fas fa-calendar-times fa-2x"></i><br>Delete Holiday</button>
                 </div>
             </div>
         </div>
