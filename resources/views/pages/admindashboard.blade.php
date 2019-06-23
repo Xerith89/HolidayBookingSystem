@@ -23,8 +23,7 @@
                 </div>
                 <div class="card-body">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#newUser">Add New User</button>
-                    <button class="btn btn-secondary" data-toggle="modal" data-target="#editUser">Edit User</button>
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#removeUser">Remove User</button>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteUser">Delete User</button>
                 </div>
             </div>
         </div>
@@ -43,10 +42,11 @@
             <div class="card text-center mx-auto border-primary" style="width:20rem;">
                 <div class="card-header">
                     <i class="fas fa-clock fa-4x"></i>
-                    <h3 class="card-title">Company Holiday Management</h3>
+                    <h3 class="card-title">Company Holidays</h3>
                 </div>
                 <div class="card-body">
-                    <p>Coming Soon
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#newHoliday">Add New Holiday</button>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#deleteHoliday">Delete Holiday</button>
                 </div>
             </div>
         </div>
@@ -87,70 +87,10 @@
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
                                         <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
-                                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#reviewRequest-{{$request->id}}">Review Request</button>
-                                        
-                                        <div class="modal fade" id="reviewRequest-{{$request->id}}" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
-                                            <form action={{action('HolidayRequests@update',['id' => $request->id])}} method="POST">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content"> {{----}}
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="requestModal">Review Holiday Request</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                    
-                                                        <div class="form-group">
-                                                            <label>Start Date</label>
-                                                            <input type="date" name="start-date" value="{{$request->request_start->format('Y-m-d')}}"  class="form-control" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Start Time</label>
-                                                            <input type="text" name="start-time" value="{{date('G:i', strtotime($request->request_start_time))}}" class="form-control form-control-sm" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>End Date</label>
-                                                            <input type="text" class="form-control" value="{{$request->request_end->format('Y-m-d')}}" name="end-date" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>End Time</label>
-                                                            <input type="text" name="end-time" value="{{date('G:i', strtotime($request->request_end_time))}}" class="form-control form-control-sm" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Total Days Taken</label>
-                                                            <input type="text" class="form-control" value="{{$request->total_days_requested}}" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Request Comments</label>
-                                                            <input type="text" name="comments" class="form-control" value="{{$request->requester_comments}}" placeholder="Optional" readonly>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Your Comments</label>
-                                                            <input type="text" name="reviewer-comments" class="form-control" value="{{$request->requester_comments}}" placeholder="Optional">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Decision</label>
-                                                            <select name="decision" class="form-control" required>
-                                                                <option>Approve</option>
-                                                                <option>Decline</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                    @csrf
-                                                    <input type="hidden" name="_method" value="PUT">
-                                                    <button type="button" class="btn btn-danger" >Cancel</button>
-                                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                                    </div>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     @endforeach
                 @else
                     <p>No Open Holiday Requests</p>
@@ -218,5 +158,158 @@
 <footer id="footer">
     <p>Copyright &copy; 2019 Stephen Lower Insurance Services</p>
 </footer>
+
+{{--Modals--}}
+<div class="modal fade" id="newUser" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action={{action('Users@store')}} method="POST">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModal">Add New User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="user-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Staff ID</label>
+                    <input type="text" name="staff-id" class="form-control form-control-sm" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                     <input type="password" class="form-control" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                     <input type="password" class="form-control" name="confirm-password" required>
+                </div>
+                <div class="form-group">
+                    <label>Admin User?</label>
+                     <select class="form-control" name="admin" selected="False">
+                        <option>False</option>
+                        <option>True</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Current Year Holiday Entitlement</label>
+                    <input type="number" name="current-year-holiday" class="form-control" required> 
+                </div>
+                <div class="form-group">
+                    <label>Next Year Holiday Entitlement</label>
+                    <input type="number" name="next-year-holiday" class="form-control" required> 
+                </div>
+                @csrf
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action={{action('Users@destroy', ['id' => $request->id])}} method="POST">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModal">Delete User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Staff ID</label>
+                    <input type="text" name="staff-id" class="form-control" required>
+                </div>
+                @csrf
+                <input type="hidden" name="_method" value="DELETE"> 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="newHoliday" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action={{action('CompanyHolidays@store')}} method="POST">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModal">Add New Holiday</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Half Day?</label>
+                     <select class="form-control" name="half-day" selected="False">
+                        <option>False</option>
+                        <option>True</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <select class="form-control" name="start-time" selected="False">
+                        <option>09:00</option>
+                        <option>12:30</option>
+                    </select>
+                </div>
+                @csrf
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteHoliday" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action={{action('CompanyHolidays@destroy', ['id' => $request->id])}} method="POST">
+            
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModal">Delete User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                @csrf
+                <input type="hidden" name="_method" value="DELETE"> 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection()
 

@@ -12,15 +12,17 @@ class PagesController extends Controller
         if (!Auth::guest())
         {
             return redirect('dashboard');
-        } else {
-            return view('pages.index');
         }
+        return view('pages.index');
+
     }
 
     public function Dashboard ()
-    {
-        
-        return view('pages.dashboard');
-       
+    {   
+        if (Auth::guest())
+        {
+            return redirect('/');
+        }
+        return view('pages.dashboard');  
     }
 }

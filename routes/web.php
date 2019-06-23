@@ -17,5 +17,8 @@ Route::get('/dashboard', 'PagesController@Dashboard');
 
 Route::resource('dashboard','HolidayRequests');
 
+Route::resource('dashboard/users','Users')->except(['index','edit','show','create']);
+Route::resource('dashboard/companyholidays','CompanyHolidays')->except(['index','edit','show','create']);
+
 Auth::routes();
 
