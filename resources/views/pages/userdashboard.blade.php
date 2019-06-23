@@ -30,7 +30,7 @@
                 <br>
                 <br>
                 @if (Auth::user()->currentyear_holiday_used < Auth::user()->currentyear_holiday_entitlement && Auth::user()->pending_holiday_used < Auth::user()->currentyear_holiday_entitlement )
-                    <button class="btn btn-primary" title="New Holiday Request" data-toggle="modal" data-target="#newRequest">New Holiday Request</button>
+                    <button class="btn btn-primary" title="New Holiday Request" data-toggle="modal" data-target="#newRequest"><i class="fas fa-calendar-day fa-2x"></i><br>New Holiday Request</button>
                 @endif
                 </div>
             </div>

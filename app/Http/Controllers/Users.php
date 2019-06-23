@@ -54,7 +54,7 @@ class Users extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       //This will be ajax
     }
 
     /**

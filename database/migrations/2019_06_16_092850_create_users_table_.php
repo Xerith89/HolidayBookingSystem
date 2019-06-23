@@ -20,10 +20,11 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique;
             $table->string('name');
             $table->boolean('admin_user');
-            $table->integer('base_holiday_entitlement');
-            $table->integer('additional_holiday_entitlement');
-            $table->integer('pending_holiday_used');
-            $table->integer('amount_holiday_used');
+            $table->decimal('currentyear_holiday_entitlement',2);
+            $table->decimal('currentyear_holiday_used',2);
+            $table->decimal('nextyear_holiday_entitlement',2);
+            $table->decimal('nextyear_holiday_used',2);
+            $table->decimal('pending_holiday_used',2);
             $table->char('remember_token',100)->nullable;
             $table->timestamps();
         });

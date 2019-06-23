@@ -16,6 +16,7 @@ class CreateHolidayRequestsTable extends Migration
         Schema::create('holiday_requests', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('request_staff_id');
+            $table->string('request_name');
             $table->date('request_start');
             $table->time('request_start_time');
             $table->date('request_end');

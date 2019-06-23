@@ -16,6 +16,8 @@ class CreateCompanyHolidaysTable extends Migration
         Schema::create('company_holidays', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->datetime('holiday_date');
+            $table->boolean('half_day');
+            $table->time('start_time');
             $table->timestamps();
         });
     }
