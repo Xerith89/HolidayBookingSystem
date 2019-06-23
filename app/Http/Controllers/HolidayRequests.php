@@ -31,7 +31,8 @@ class HolidayRequests extends Controller
             $pending_requests = HolidayRequest::where('request_status', 'Pending')->get();
             $completed_requests = HolidayRequest::where('request_status', 'approved')
             ->orWhere('request_status', 'Declined')->get();
-            $approved_requests = NULL;
+            $approved_requests = HolidayRequest::where('request_status', 'Approved')->where('request_start', '>=', Carbon::now())
+            ->where('request_end', '<=', Carbon::now()->addDays(5))->get();
         } else {
             //We only want to see our own
             $pending_requests = HolidayRequest::where('request_status', 'pending')->where('request_staff_id','=', Auth::user()->staff_id)->get();
@@ -152,7 +153,7 @@ class HolidayRequests extends Controller
                 
                 $holrequest->request_status='Approved';
                 $user->pending_holiday_used -= $holrequest->total_days_requested;
-                $user->currentyear_holiday_used -= $holrequest->total_days_requested;
+                $user->currentyear_holiday_used += $holrequest->total_days_requested;
             } else {
 
                 $holrequest->request_status='Declined';

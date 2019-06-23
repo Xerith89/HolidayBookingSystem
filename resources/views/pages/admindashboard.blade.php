@@ -14,6 +14,31 @@
         </form>
     </nav> 
     <br>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card border-primary mx-auto" style="width:50rem;">
+                    <div class="card-header text-center" id="headingOne">
+                        <i class="fas fa-calendar-week fa-4x"></i>
+                        <h3 class="card-title">Holiday This Week</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        @if(count($approved_requests) > 0)
+                            <ul class="list-group list-group-flush">
+                            @foreach ($approved_requests as $holiday)
+                                <li class="list-group-item list-group-item-info"><strong>{{$holiday->request_name}}</strong> is on holiday for 
+                                <strong>{{number_format($holiday->total_days_requested,1)}}</strong> days from <strong>{{$holiday->request_start->format('D')}} {{date('G:i', strtotime($holiday->request_start_time))}}</strong> to <strong>{{$holiday->request_end->format('D')}} {{date('G:i', strtotime($holiday->request_end_time))}}</strong>.</li>
+                            @endforeach
+                            </ul>
+                        @else
+                            <p>No Booked Holidays This Week.
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="row">
         <div class="col-lg-4 d-flex align-items-stretch">
             <div class="card text-center mx-auto border-primary" style="width:20rem;">
@@ -52,14 +77,14 @@
         </div>
     </div>
     <br>
-    <br>
     <div id="accordion">
         <div class="card border-primary" style="width:auto;">
             <div class="card-header text-center" id="headingOne">
-                 <h3 class="card-title"><i class="fas fa-exclamation-triangle"></i> Pending Requests <span class="badge badge-primary">{{count($pending_requests)}}</span></h3> 
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                 <h3 class="card-title">Pending Requests <span class="badge badge-primary">{{count($pending_requests)}}</span></h3> 
             </div>
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body text-center ">
+            <div class="card-body text-center" style=" max-height: 600px; overflow-y: auto;">
                 @if(count($pending_requests) > 0)
                     @foreach ($pending_requests as $request )
                         <div class="table-responsive">
@@ -164,10 +189,11 @@
     <div id="accordion-two">
         <div class="card border-primary" style="width:auto;">
             <div class="card-header text-center" id="headingTwo">
-                <h3 class="card-title"><i class="fas fa-calendar-check"></i> Completed Requests <span class="badge badge-success">{{count($completed_requests)}}</span></h3>
+                <i class="fas fa-calendar-check fa-2x"></i>
+                <h3 class="card-title">Completed Requests <span class="badge badge-success">{{count($completed_requests)}}</span></h3>
             </div>
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion-two">
-            <div class="card-body text-center">
+            <div class="card-body text-center" style=" max-height: 600px; overflow-y: auto;">
                 
                 @if(count($completed_requests) > 0)
                     @foreach ($completed_requests as $completedrequest )
