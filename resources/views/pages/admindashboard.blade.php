@@ -87,11 +87,71 @@
                                         <td>{{$request->requester_comments}}</td>
                                         <td>{{$request->request_status}}</td>
                                         <td>{{$request->updated_at->format('d/m/Y H:i') }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    @endforeach
+                                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#reviewRequest-{{$request->id}}">Review Request</button>
+                                        
+                                          <div class="modal fade" id="reviewRequest-{{$request->id}}" tabindex="-1" role="dialog" aria-labelledby="requestModal" aria-hidden="true">
+                                            <form action={{action('HolidayRequests@update',['id' => $request->id])}} method="POST">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content"> {{----}}
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="requestModal">Review Holiday Request</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                    
+                                                        <div class="form-group">
+                                                            <label>Start Date</label>
+                                                            <input type="date" name="start-date" value="{{$request->request_start->format('Y-m-d')}}"  class="form-control" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Start Time</label>
+                                                            <input type="text" name="start-time" value="{{date('G:i', strtotime($request->request_start_time))}}" class="form-control form-control-sm" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>End Date</label>
+                                                            <input type="text" class="form-control" value="{{$request->request_end->format('d/m/Y')}}" name="end-date" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>End Time</label>
+                                                            <input type="text" name="end-time" value="{{date('G:i', strtotime($request->request_end_time))}}" class="form-control form-control-sm" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Total Days Taken</label>
+                                                            <input type="text" class="form-control" value="{{$request->total_days_requested}}" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Request Comments</label>
+                                                            <input type="text" name="comments" class="form-control" value="{{$request->requester_comments}}"  readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Your Comments</label>
+                                                            <input type="text" name="reviewer-comments" class="form-control" value="{{$request->requester_comments}}" placeholder="Optional">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Decision</label>
+                                                            <select name="decision" class="form-control" required>
+                                                                <option>Approve</option>
+                                                                <option>Decline</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                    @csrf
+                                                    <input type="hidden" name="_method" value="PUT">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
                 @else
                     <p>No Open Holiday Requests</p>
                 @endif
