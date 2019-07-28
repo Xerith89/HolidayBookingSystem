@@ -50,5 +50,6 @@
         </main>
     </div>
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/request.js') }}"></script>
 </body>
 </html>

@@ -53,5 +53,12 @@ class UsersTest extends TestCase
         $this->assertCount(1, User::all());
    }
 
+   /** @test */
+   public function user_can_be_deleted_form()
+   {
+          $response = $this->actingAs(factory(User::class)->create());
+          $response = $this->delete(route('users.destroy', 1));
+          $this->assertEquals(302, $response->getStatusCode());
+   }
 
 }

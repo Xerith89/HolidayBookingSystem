@@ -33,15 +33,15 @@ class HolidayRequests extends Controller
             ->orWhere('request_status', 'Declined')->get();
             $approved_requests = HolidayRequest::where('request_status', 'Approved')->where('request_start', '>=', Carbon::now())
             ->where('request_end', '<=', Carbon::now()->addDays(5))->get();
-        } else {
+        } else { 
             //We only want to see our own
             $pending_requests = HolidayRequest::where('request_status', 'pending')->where('request_staff_id','=', Auth::user()->staff_id)->get();
             $completed_requests = HolidayRequest::where('request_status', 'Approved')->where('request_staff_id', '=', Auth::user()->staff_id)
             ->orWhere('request_status', 'Declined')->where('request_staff_id', '=', Auth::user()->staff_id)->get();
             $approved_requests = HolidayRequest::where('request_status', 'Approved')->where('request_staff_id', '=', Auth::user()->staff_id)->orderBy('request_start')->get();
         }
-        
-        return view('pages.dashboard',compact('pending_requests', 'completed_requests', 'approved_requests'));
+
+        return response()->json([$pending_requests, $completed_requests, $approved_requests]);
         
     }
 
