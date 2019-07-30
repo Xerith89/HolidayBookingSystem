@@ -16,9 +16,10 @@ Route::get('/', 'PagesController@Index');
 Route::get('/dashboard', 'PagesController@Dashboard');
 
 Route::resource('api/holidayrequests','HolidayRequests');
-
-Route::resource('dashboard/users','Users')->except(['index','edit','show','create']);
-Route::resource('dashboard/companyholidays','CompanyHolidays')->except(['index','edit','show','create','update']);
+Route::resource('api/users','Users')->except(['index','edit','show','create']);
+Route::resource('api/companyholidays','CompanyHolidays')->except(['index','edit','show','create','update']);
+Route::resource('api/sickness','Sickness')->except(['index','edit','show','create','update']);
+Route::resource('api/training','Training')->except(['index','edit','show','create','update']);
 
 Auth::routes();
 
